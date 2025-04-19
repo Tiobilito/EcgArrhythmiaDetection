@@ -1,6 +1,6 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D, MaxPooling1D, BatchNormalization, Dropout, Flatten, Dense
-from tensorflow.keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Conv1D, MaxPooling1D, BatchNormalization, Dropout, Flatten, Dense
+from keras.optimizers import Adam
 from config import LABELS, HYPERPARAMS
 
 def build_cnn(input_shape, filters, dropout_rates):

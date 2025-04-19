@@ -1,6 +1,6 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dropout, Dense
-from tensorflow.keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import LSTM, Dropout, Dense
+from keras.optimizers import Adam
 from config import LABELS, HYPERPARAMS
 
 def build_rnn(input_shape, units, dropout_rates):

@@ -1,5 +1,5 @@
 import argparse
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 from data_processing import prepare_datasets
 from utils import evaluate_model
 

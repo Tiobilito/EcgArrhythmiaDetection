@@ -9,7 +9,7 @@ from models.rnn import build_rnn
 from utils import plot_history
 from config import MODELS_SAVED_DIR, RESULTS_DIR, HYPERPARAMS
 
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 # Asegurarse de que existan estas carpetas
 os.makedirs(MODELS_SAVED_DIR, exist_ok=True)
