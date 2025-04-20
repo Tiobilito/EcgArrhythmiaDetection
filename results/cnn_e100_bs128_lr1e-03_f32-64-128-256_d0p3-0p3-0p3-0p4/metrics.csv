@@ -1,0 +1,2 @@
+model,epochs,batch_size,learning_rate,test_size,oversample,hidden_sizes,filters,units,dropout_rates,val_accuracy,val_loss
+cnn,100,128,0.001,0.2,True,,"32,64,128,256",,"0.3,0.3,0.3,0.4",0.9941355586051941,0.01826627366244793
