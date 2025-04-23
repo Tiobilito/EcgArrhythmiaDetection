@@ -1,30 +1,26 @@
-# EcgArrhythmiaDetection
- 
-## Resumen de conceptos
+# EcgArrhythmiaDetection 🫀
 
-### Redes Neuronales Artificiales (RNA)  
+## Resumen de conceptos 🧠
+
+### Redes Neuronales Artificiales (RNA) 🔮  
 Una Red Neuronal Artificial es un modelo computacional inspirado en la estructura y funciones de las neuronas biológicas, compuesto por capas de nodos (neuronas artificiales) que transfieren información mediante conexiones ponderadas. Cada neurona recibe señales de entrada, las combina linealmente, aplica una función de activación no lineal (por ejemplo ReLU) y transmite su salida a la siguiente capa. Las RNA feed-forward (o perceptrón multicapa) se emplean para clasificación y regresión cuando los datos no tienen componentes espaciales o temporales explícitos.
 
-### Redes Neuronales Convolucionales (CNN)  
+### Redes Neuronales Convolucionales (CNN) 👁️  
 Las CNN son un tipo de RNA feed-forward optimizadas para datos con estructura espacial (imágenes o señales), usando **filtros convolucionales** que aprenden patrones locales mediante operaciones de convolución. Cada capa convolucional extrae mapas de características, seguidos por capas de **pooling** que reducen la dimensionalidad y **Batch Normalization** para estabilizar el entrenamiento. Dropout se añade para mitigar el sobreajuste, y finalmente una capa densa con softmax genera la distribución de probabilidad sobre las clases.
 
-### Redes Neuronales Recurrentes (RNN)  
+### Redes Neuronales Recurrentes (RNN) ⏱️  
 Las RNN están diseñadas para datos secuenciales o series de tiempo, alimentando la salida de una neurona como entrada en pasos posteriores, lo que permite modelar dependencias temporales. Las variantes LSTM y GRU incorporan **mecanismos de puerta** para conservar información relevante por más pasos y evitar problemas de gradientes desaparecidos o explosivos.
 
----
-
-## Enunciado del problema
+## Enunciado del problema ❗
 
 Las **enfermedades cardiovasculares (CVD)** son la principal causa de muerte global, con 17.9 millones de fallecimientos en 2019 (32 % de todas las muertes) según la OMS, y gran parte de ellas prevenibles si se detectan a tiempo. El objetivo es desarrollar modelos automáticos que clasifiquen señales de ECG de la base MIT-BIH Arrhythmia Database (48 grabaciones de 30 min, dos canales) para identificar distintos tipos de arritmias, mejorando la detección temprana y facilitando aplicaciones de telemedicina.
 
----
+## Código 💻
 
-## Código utilizado
+<details>
+<summary>1. Preprocesamiento de datos 🔍</summary>
 
-A continuación, fragmentos clave con su propósito:
-
-### 1. Preprocesamiento de datos  
-**Objetivo**: cargar, normalizar, balancear y dar forma a los datos para los modelos.
+Carga, normalización, balanceo y preparación de datos para los modelos.
 
 ```python
 # data_processing.py
@@ -44,9 +40,13 @@ def preprocess(df):
 # reshape para modelos 1D: (samples, timesteps, 1)
 X_train = X_train.reshape(-1, 187, 1)
 ```
+</details>
 
-### 2. Definición de arquitecturas  
-**RNA**: capas densas y Dropout para extraer características globales.
+<details>
+<summary>2. Definición de arquitecturas 🏗️</summary>
+
+### RNA (Artificial Neural Network)
+Capas densas y Dropout para extraer características globales.
 
 ```python
 # models/ann.py
@@ -61,7 +61,8 @@ def build_ann(input_shape, hidden_sizes, dropout_rates):
     return model
 ```
 
-**CNN**: bloques Conv1D + BatchNorm + MaxPooling + Dropout.
+### CNN (Convolutional Neural Network) 
+Bloques Conv1D + BatchNorm + MaxPooling + Dropout.
 
 ```python
 # models/cnn.py
@@ -84,7 +85,8 @@ def build_cnn(input_shape, filters, dropout_rates):
     return model
 ```
 
-**RNN (LSTM)**: capas LSTM con `return_sequences` y Dropout.
+### RNN (LSTM)
+Capas LSTM con `return_sequences` y Dropout.
 
 ```python
 # models/rnn.py
@@ -102,9 +104,12 @@ def build_rnn(input_shape, units, dropout_rates):
     model.compile(optimizer=Adam(lr), loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 ```
+</details>
 
-### 3. Entrenamiento y guardado  
-**Propósito**: generar un *run_name* único, entrenar con EarlyStopping y guardar solo el mejor modelo.
+<details>
+<summary>3. Entrenamiento y guardado 🎯</summary>
+
+Generación de nombre único para cada experimento, entrenamiento con EarlyStopping y guardado del mejor modelo.
 
 ```python
 # train.py
@@ -134,9 +139,12 @@ history = model.fit(X_train, y_train,
 run_name = make_run_name(args)
 os.replace("temp_best.h5", f"models/saved/{run_name}.h5")
 ```
+</details>
 
-### 4. Evaluación y exportación de métricas  
-**Propósito**: calcular test_loss, test_accuracy, classification_report y matriz de confusión en la carpeta del run.
+<details>
+<summary>4. Evaluación y métricas 📊</summary>
+
+Cálculo y exportación de métricas de evaluación: pérdida y precisión en test, reporte de clasificación y matriz de confusión.
 
 ```python
 # evaluate.py
@@ -152,12 +160,11 @@ pd.DataFrame(cr).transpose().to_csv(f"{run}/classification_report.csv")
 # 3) Matriz de confusión
 evaluate_model(model, X_test, y_test, run_name, plots_dir=f"{run}/plots")
 ```
+</details>
 
----
+## Resultados 📈
 
-## Resultados
-
-**Curvas de entrenamiento y pérdida**  
+**Curvas de entrenamiento y pérdida** 📉  
 ANN:  
 ![Accuracy ANN](results\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5\plots\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_accuracy.png)  
 ![Loss ANN](results\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5\plots\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_loss.png)
@@ -170,7 +177,7 @@ RNN:
 ![Accuracy RNN](results\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3\plots\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_accuracy.png)  
 ![Loss RNN](results\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3\plots\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_loss.png)  
 
-**Matriz de confusión**  
+**Matriz de confusión** 🎯  
 ANN:  
 ![Confusión ANN](results\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5\plots\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_confusion_matrix.png)  
 CNN:  
@@ -178,7 +185,7 @@ CNN:
 RNN:  
 ![Confusión RNN](results\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3\plots\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_confusion_matrix.png)  
 
-**Tabla de hiperparámetros y métricas**  
+**Tabla de hiperparámetros y métricas** 📋  
 
 | Modelo | Epochs | Batch Size | Learning Rate | Estructura (capas/filtros/unidades) | Dropout Rates | Val Accuracy | Val Loss | Test Accuracy | Test Loss |
 |--------|--------|------------|---------------|-------------------------------------|---------------|--------------|----------|---------------|-----------|
@@ -222,9 +229,7 @@ RNN:
 | **Macro avg**                 | 0.913     | 0.915  | 0.914    | 21892   |
 | **Weighted avg**              | 0.984     | 0.983  | 0.983    | 21892   |
 
----
-
-## Comparación de los tres clasificadores
+## Comparación de los tres clasificadores 🔍
 
 A continuación se presenta un análisis comparativo de los tres modelos implementados (ANN, CNN y RNN) utilizando las métricas de validación y test accuracy, recall y F1-score. Los resultados se basan en los experimentos realizados sobre el dataset MIT-BIH Arrhythmia:
 
@@ -240,23 +245,19 @@ A continuación se presenta un análisis comparativo de los tres modelos impleme
 
 El análisis detallado de los reportes de clasificación muestra que tanto CNN como RNN presentan mayor recall y F1-score en las clases minoritarias respecto a ANN, lo que indica mejor capacidad de generalización ante el desbalance de clases.
 
----
+## Conclusiones y observaciones 🎯
 
-## Conclusiones y observaciones
+- **Desempeño relativo** 📈: RNN es el modelo más robusto para la tarea, seguido de cerca por CNN. ANN es más simple y rápido de entrenar, pero menos eficaz ante la complejidad de las señales ECG.
+- **Limitaciones** ⚠️: Se observa cierto desbalance en la clasificación de clases poco representadas, lo que sugiere la necesidad de técnicas adicionales como data augmentation o ajuste de pesos de clase.
+- **Propuestas de mejora** 🚀:
+  - 🔄 Explorar arquitecturas híbridas (por ejemplo, CNN+RNN) para aprovechar tanto la extracción local de características como la modelización temporal.
+  - ⚡ Ajustar la ventana temporal de entrada y experimentar con mecanismos de atención.
+  - 🎯 Implementar estrategias de regularización y validación cruzada para mejorar la generalización.
+  - 🔍 Investigar el impacto de diferentes técnicas de preprocesamiento y normalización.
 
-- **Desempeño relativo**: RNN es el modelo más robusto para la tarea, seguido de cerca por CNN. ANN es más simple y rápido de entrenar, pero menos eficaz ante la complejidad de las señales ECG.
-- **Limitaciones**: Se observa cierto desbalance en la clasificación de clases poco representadas, lo que sugiere la necesidad de técnicas adicionales como data augmentation o ajuste de pesos de clase.
-- **Propuestas de mejora**:
-  - Explorar arquitecturas híbridas (por ejemplo, CNN+RNN) para aprovechar tanto la extracción local de características como la modelización temporal.
-  - Ajustar la ventana temporal de entrada y experimentar con mecanismos de atención.
-  - Implementar estrategias de regularización y validación cruzada para mejorar la generalización.
-  - Investigar el impacto de diferentes técnicas de preprocesamiento y normalización.
+Estos resultados demuestran el potencial de las redes neuronales profundas para la detección automática de arritmias en señales ECG, facilitando aplicaciones de telemedicina y diagnóstico asistido. 🏥
 
-Estos resultados demuestran el potencial de las redes neuronales profundas para la detección automática de arritmias en señales ECG, facilitando aplicaciones de telemedicina y diagnóstico asistido.
-
----
-
-## Referencias
+## Referencias 📚
 
 1. Neural network (machine learning) – Wikipedia 
 2. What Is a Neural Network? – Investopedia 
