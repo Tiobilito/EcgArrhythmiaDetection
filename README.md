@@ -257,6 +257,57 @@ El análisis detallado de los reportes de clasificación muestra que tanto CNN c
 
 Estos resultados demuestran el potencial de las redes neuronales profundas para la detección automática de arritmias en señales ECG, facilitando aplicaciones de telemedicina y diagnóstico asistido. 🏥
 
+## 🏁 Getting Started
+
+Sigue estos pasos para ejecutar el proyecto desde cero en tu entorno local:
+
+### 1. Clona el repositorio
+
+```bash
+git clone https://github.com/Tiobilito/EcgArrhythmiaDetection.git
+cd EcgArrhythmiaDetection
+```
+
+### 2. Instala las dependencias
+
+Se recomienda usar un entorno virtual de Anaconda:
+
+```bash
+conda env create -f environment.yml
+conda activate ecgarrhythmia
+```
+
+### 3. Descarga el dataset
+
+Coloca los archivos `mitbih_train.csv` y `mitbih_test.csv` en la carpeta `DATASET-ECG/`.  
+Puedes obtenerlos desde [PhysioNet MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/).
+
+### 4. Entrena un modelo
+
+Ejemplo para entrenar una CNN:
+
+```bash
+python train.py --model cnn --epochs 100 --batch_size 128 --learning_rate 1e-3 --cnn_filters 32 64 128 256 --dropout_rates 0.3 0.3 0.3 0.4
+```
+
+Puedes cambiar los parámetros para entrenar una ANN o RNN, por ejemplo:
+
+```bash
+python train.py --model ann --epochs 100 --batch_size 128 --learning_rate 5e-4 --ann_hidden_sizes 256 128 64 --dropout_rates 0.5 0.5 0.5
+```
+
+### 5. Evalúa el modelo entrenado
+
+```bash
+python evaluate.py --model-path models/saved/<run_name>.h5
+```
+
+Reemplaza `<run_name>` por el nombre generado automáticamente tras el entrenamiento (ver carpeta `models/saved/`).
+
+### 6. Visualiza resultados
+
+Las métricas, reportes y gráficas se guardan en la carpeta `results/<run_name>/`.
+
 ## Referencias 📚
 
 1. Neural network (machine learning) – Wikipedia 
