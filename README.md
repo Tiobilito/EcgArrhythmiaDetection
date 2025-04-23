@@ -3,19 +3,19 @@
 ## Resumen de conceptos
 
 ### Redes Neuronales Artificiales (RNA)  
-Una Red Neuronal Artificial es un modelo computacional inspirado en la estructura y funciones de las neuronas biológicas, compuesto por capas de nodos (neuronas artificiales) que transfieren información mediante conexiones ponderadas citeturn0search0. Cada neurona recibe señales de entrada, las combina linealmente, aplica una función de activación no lineal (por ejemplo ReLU) y transmite su salida a la siguiente capa citeturn0news49. Las RNA feed-forward (o perceptrón multicapa) se emplean para clasificación y regresión cuando los datos no tienen componentes espaciales o temporales explícitos.
+Una Red Neuronal Artificial es un modelo computacional inspirado en la estructura y funciones de las neuronas biológicas, compuesto por capas de nodos (neuronas artificiales) que transfieren información mediante conexiones ponderadas. Cada neurona recibe señales de entrada, las combina linealmente, aplica una función de activación no lineal (por ejemplo ReLU) y transmite su salida a la siguiente capa. Las RNA feed-forward (o perceptrón multicapa) se emplean para clasificación y regresión cuando los datos no tienen componentes espaciales o temporales explícitos.
 
 ### Redes Neuronales Convolucionales (CNN)  
-Las CNN son un tipo de RNA feed-forward optimizadas para datos con estructura espacial (imágenes o señales), usando **filtros convolucionales** que aprenden patrones locales mediante operaciones de convolución citeturn0search1. Cada capa convolucional extrae mapas de características, seguidos por capas de **pooling** que reducen la dimensionalidad y **Batch Normalization** para estabilizar el entrenamiento citeturn0search16. Dropout se añade para mitigar el sobreajuste, y finalmente una capa densa con softmax genera la distribución de probabilidad sobre las clases.
+Las CNN son un tipo de RNA feed-forward optimizadas para datos con estructura espacial (imágenes o señales), usando **filtros convolucionales** que aprenden patrones locales mediante operaciones de convolución. Cada capa convolucional extrae mapas de características, seguidos por capas de **pooling** que reducen la dimensionalidad y **Batch Normalization** para estabilizar el entrenamiento. Dropout se añade para mitigar el sobreajuste, y finalmente una capa densa con softmax genera la distribución de probabilidad sobre las clases.
 
 ### Redes Neuronales Recurrentes (RNN)  
-Las RNN están diseñadas para datos secuenciales o series de tiempo, alimentando la salida de una neurona como entrada en pasos posteriores, lo que permite modelar dependencias temporales citeturn0search2. Las variantes LSTM y GRU incorporan **mecanismos de puerta** para conservar información relevante por más pasos y evitar problemas de gradientes desaparecidos o explosivos citeturn0search7.
+Las RNN están diseñadas para datos secuenciales o series de tiempo, alimentando la salida de una neurona como entrada en pasos posteriores, lo que permite modelar dependencias temporales. Las variantes LSTM y GRU incorporan **mecanismos de puerta** para conservar información relevante por más pasos y evitar problemas de gradientes desaparecidos o explosivos.
 
 ---
 
 ## Enunciado del problema
 
-Las **enfermedades cardiovasculares (CVD)** son la principal causa de muerte global, con 17.9 millones de fallecimientos en 2019 (32 % de todas las muertes) según la OMS, y gran parte de ellas prevenibles si se detectan a tiempo citeturn1search0. El objetivo es desarrollar modelos automáticos que clasifiquen señales de ECG de la base MIT-BIH Arrhythmia Database (48 grabaciones de 30 min, dos canales) para identificar distintos tipos de arritmias, mejorando la detección temprana y facilitando aplicaciones de telemedicina citeturn0search3.
+Las **enfermedades cardiovasculares (CVD)** son la principal causa de muerte global, con 17.9 millones de fallecimientos en 2019 (32 % de todas las muertes) según la OMS, y gran parte de ellas prevenibles si se detectan a tiempo. El objetivo es desarrollar modelos automáticos que clasifiquen señales de ECG de la base MIT-BIH Arrhythmia Database (48 grabaciones de 30 min, dos canales) para identificar distintos tipos de arritmias, mejorando la detección temprana y facilitando aplicaciones de telemedicina.
 
 ---
 
