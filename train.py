@@ -11,27 +11,20 @@ from config import MODELS_SAVED_DIR, RESULTS_DIR, HYPERPARAMS
 
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
-# Asegurarse de que existan estas carpetas
+# Asegura que existan las carpetas necesarias
 os.makedirs(MODELS_SAVED_DIR, exist_ok=True)
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 def make_run_name(args):
-    # base con tipo modelo, epochs, batch_size, learning_rate
     lr_str = f"{args.learning_rate:.0e}"
     parts = [args.model, f"e{args.epochs}", f"bs{args.batch_size}", f"lr{lr_str}"]
-    # anexa estructura específica
     if args.model == 'ann':
-        sizes = "-".join(str(h) for h in args.ann_hidden_sizes)
-        parts.append(f"h{sizes}")
+        parts.append("h" + "-".join(map(str, args.ann_hidden_sizes)))
     if args.model == 'cnn':
-        flts = "-".join(str(f) for f in args.cnn_filters)
-        parts.append(f"f{flts}")
+        parts.append("f" + "-".join(map(str, args.cnn_filters)))
     if args.model == 'rnn':
-        units = "-".join(str(u) for u in args.rnn_units)
-        parts.append(f"u{units}")
-    # dropout (reemplazar punto por 'p' para filesystem)
-    drs = "-".join(str(dr).replace('.', 'p') for dr in args.dropout_rates)
-    parts.append(f"d{drs}")
+        parts.append("u" + "-".join(map(str, args.rnn_units)))
+    parts.append("d" + "-".join(str(dr).replace('.', 'p') for dr in args.dropout_rates))
     return "_".join(parts)
 
 def get_model(name, input_shape, kw):
@@ -51,15 +44,13 @@ def main():
     parser.add_argument('--learning_rate',   type=float, default=HYPERPARAMS['learning_rate'])
     parser.add_argument('--test_size',       type=float, default=HYPERPARAMS['test_size'])
     parser.add_argument('--oversample',      type=lambda x: x.lower()=='true', default=HYPERPARAMS['oversample'])
-
     parser.add_argument('--ann_hidden_sizes', nargs='+', type=int,   default=[128,64])
     parser.add_argument('--cnn_filters',      nargs='+', type=int,   default=[32,64,128])
     parser.add_argument('--rnn_units',        nargs='+', type=int,   default=[64,64])
     parser.add_argument('--dropout_rates',    nargs='+', type=float, default=[0.5,0.5])
-
     args = parser.parse_args()
 
-    # Actualizar globals
+    # Actualiza hiperparámetros globales
     HYPERPARAMS.update({
         'epochs'        : args.epochs,
         'batch_size'    : args.batch_size,
@@ -68,31 +59,25 @@ def main():
         'oversample'    : args.oversample
     })
 
-    # Preparar datos
+    # Prepara datos y modelo
     (X_train, y_train), (X_val, y_val), _, _ = prepare_datasets()
     input_shape = X_train.shape[1:]
-
-    # Construir modelo
-    model_kw = {}
-    if args.model == 'ann':
-        model_kw = {'hidden_sizes': args.ann_hidden_sizes, 'dropout_rates': args.dropout_rates}
-    if args.model == 'cnn':
-        model_kw = {'filters': args.cnn_filters, 'dropout_rates': args.dropout_rates}
-    if args.model == 'rnn':
-        model_kw = {'units': args.rnn_units, 'dropout_rates': args.dropout_rates}
-
+    model_kw = {
+        'hidden_sizes': args.ann_hidden_sizes,
+        'filters'     : args.cnn_filters,
+        'units'       : args.rnn_units,
+        'dropout_rates': args.dropout_rates
+    }
     model = get_model(args.model, input_shape, model_kw)
 
-    # Callbacks
+    # Callbacks: solo checkpoint del “best”
     callbacks = [
         EarlyStopping(patience=5, restore_best_weights=True),
         ReduceLROnPlateau(patience=3),
-        # guardamos modelo "best" en carpeta temporal, pero renombraremos al final
         ModelCheckpoint("temp_best.h5", save_best_only=True)
     ]
 
-    # ================================================
-    # 1) Entrenar
+    # Entrenamiento
     history = model.fit(
         X_train, y_train,
         validation_data=(X_val, y_val),
@@ -101,29 +86,27 @@ def main():
         callbacks=callbacks
     )
 
-    # 2) Nombre y carpetas por run
-    run_name       = make_run_name(args)
-    run_folder     = os.path.join(RESULTS_DIR, run_name)
-    plots_folder   = os.path.join(run_folder, "plots")
+    # Prepara carpetas de resultados para este run
+    run_name     = make_run_name(args)
+    run_folder   = os.path.join(RESULTS_DIR, run_name)
+    plots_folder = os.path.join(run_folder, "plots")
     os.makedirs(plots_folder, exist_ok=True)
 
-    # 3) Guardar curvas
+    # Guarda curvas de entrenamiento
     plot_history(history, run_name, plots_folder)
 
-    # 4) Guardar modelo final y best
-    os.replace("temp_best.h5",
-               os.path.join(MODELS_SAVED_DIR, f"{run_name}.h5"))
-    model.save(os.path.join(MODELS_SAVED_DIR, f"{run_name}_final.h5"))
+    # Renombra el único checkpoint al nombre final
+    final_model_path = os.path.join(MODELS_SAVED_DIR, f"{run_name}.h5")
+    os.replace("temp_best.h5", final_model_path)
 
-    # 5) Guardar métricas e hiper‑parámetros
+    # Guarda métricas e hiperparámetros en CSV
     val_acc  = history.history['val_accuracy'][-1]
     val_loss = history.history['val_loss'][-1]
-
     metrics_file = os.path.join(run_folder, "metrics.csv")
     with open(metrics_file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([
-            "model","epochs","batch_size","learning_rate","test_size","oversample",
+            "model","epochs","batch_size","learning_rate",
             "hidden_sizes","filters","units","dropout_rates","val_accuracy","val_loss"
         ])
         writer.writerow([
@@ -131,8 +114,6 @@ def main():
             args.epochs,
             args.batch_size,
             args.learning_rate,
-            args.test_size,
-            args.oversample,
             ",".join(map(str, args.ann_hidden_sizes)) if args.model=="ann" else "",
             ",".join(map(str, args.cnn_filters))      if args.model=="cnn" else "",
             ",".join(map(str, args.rnn_units))        if args.model=="rnn" else "",
@@ -141,8 +122,8 @@ def main():
             val_loss
         ])
 
-    print(f"Resultados guardados en: {run_folder}")
-    print(f"Modelos en: {MODELS_SAVED_DIR}")
+    print(f"✅ Resultados guardados en: {run_folder}")
+    print(f"✅ Modelo guardado en: {final_model_path}")
 
 if __name__ == '__main__':
     main()
