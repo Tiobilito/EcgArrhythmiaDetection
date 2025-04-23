@@ -166,24 +166,24 @@ evaluate_model(model, X_test, y_test, run_name, plots_dir=f"{run}/plots")
 
 **Curvas de entrenamiento y pérdida** 📉  
 ANN:  
-![Accuracy ANN](results\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5\plots\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_accuracy.png)  
-![Loss ANN](results\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5\plots\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_loss.png)
+![Accuracy ANN](results/ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5/plots/ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_accuracy.png)  
+![Loss ANN](results/ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5/plots/ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_loss.png)
 
 CNN:  
-![Accuracy CNN](results\cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4\plots\cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4_accuracy.png)  
-![Loss CNN](results\cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4\plots\cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4_loss.png)  
+![Accuracy CNN](results/cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4/plots/cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4_accuracy.png)  
+![Loss CNN](results/cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4/plots/cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4_loss.png)  
 
 RNN:  
-![Accuracy RNN](results\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3\plots\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_accuracy.png)  
-![Loss RNN](results\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3\plots\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_loss.png)  
+![Accuracy RNN](results/rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3/plots/rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_accuracy.png)  
+![Loss RNN](results/rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3/plots/rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_loss.png)  
 
 **Matriz de confusión** 🎯  
 ANN:  
-![Confusión ANN](results\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5\plots\ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_confusion_matrix.png)  
+![Confusión ANN](results/ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5/plots/ann_e100_bs128_lr5e-04_h256-128-64_d0p5-0p5-0p5_confusion_matrix.png)  
 CNN:  
-![Confusión CNN](results\cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4\plots\cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4_confusion_matrix.png)  
+![Confusión CNN](results/cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4/plots/cnn_e100_bs128_lr1e-03_f32-64-128-256_d0p3-0p3-0p3-0p4_confusion_matrix.png)  
 RNN:  
-![Confusión RNN](results\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3\plots\rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_confusion_matrix.png)  
+![Confusión RNN](results/rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3/plots/rnn_e100_bs64_lr1e-03_u128-64_d0p3-0p3_confusion_matrix.png)  
 
 **Tabla de hiperparámetros y métricas** 📋  
 
