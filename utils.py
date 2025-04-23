@@ -5,13 +5,7 @@ import numpy as np
 from config import LABELS
 
 def plot_history(history, model_name, plots_dir):
-    """
-    Guarda dos gráficas en plots_dir:
-      - {model_name}_accuracy.png
-      - {model_name}_loss.png
-    """
     os.makedirs(plots_dir, exist_ok=True)
-
     # Accuracy
     plt.figure()
     plt.plot(history.history['accuracy'], label='train_acc')
@@ -22,7 +16,6 @@ def plot_history(history, model_name, plots_dir):
     plt.legend()
     plt.savefig(os.path.join(plots_dir, f"{model_name}_accuracy.png"))
     plt.close()
-
     # Loss
     plt.figure()
     plt.plot(history.history['loss'], label='train_loss')
@@ -35,16 +28,14 @@ def plot_history(history, model_name, plots_dir):
     plt.close()
 
 def evaluate_model(model, X_test, y_test, model_name, plots_dir=None):
-    """
-    Si plots_dir dado, guarda la matriz de confusión allí, 
-    sino solo la imprime en consola.
-    """
     y_pred_probs = model.predict(X_test)
     y_pred = np.argmax(y_pred_probs, axis=1)
     y_true = np.argmax(y_test, axis=1)
 
+    # Reporte en consola
     print(classification_report(y_true, y_pred, target_names=list(LABELS.values())))
 
+    # Matriz de confusión
     if plots_dir:
         os.makedirs(plots_dir, exist_ok=True)
         cm = confusion_matrix(y_true, y_pred)
